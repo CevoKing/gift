@@ -1,274 +1,271 @@
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>Spring 2026 — Premium Card</title>
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,600&family=Montserrat:wght@100;300;500;700&display=swap" rel="stylesheet">
-        <style>
-            :root {
-                --bg-dark: #0a0a0a;
-                --accent: #ff8fab;
-                --card-glass: rgba(255, 255, 255, 0.03);
-                --transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-            }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spring 2026 — Premium Card</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,600&family=Montserrat:wght@100;300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --accent: #ff8fab;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-            * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-            body {
-                background-color: var(--bg-dark);
-                min-height: 100vh;
-                min-height: -webkit-fill-available;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: 'Montserrat', sans-serif;
-                overflow: hidden;
-                transition: background 1.5s ease;
-                padding: 20px;
-            }
+        body {
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            transition: background 1.5s ease;
+            padding: 20px;
+        }
 
-            body.active { background-color: #fffafb; }
+        body.active { background-color: #fffafb; }
 
-            .spotlight {
-                position: absolute;
-                width: 60vw;
-                height: 60vw;
-                background: radial-gradient(circle, rgba(255, 143, 171, 0.15) 0%, transparent 70%);
-                filter: blur(80px);
-                z-index: 1;
-                transition: var(--transition);
-                pointer-events: none;
-            }
+        .spotlight {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(255, 143, 171, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            z-index: 1;
+            transition: var(--transition);
+            pointer-events: none;
+        }
 
-            body.active .spotlight {
-                background: radial-gradient(circle, rgba(255, 143, 171, 0.3) 0%, transparent 70%);
-                transform: scale(1.5);
-            }
+        body.active .spotlight {
+            background: radial-gradient(circle, rgba(255, 143, 171, 0.3) 0%, transparent 70%);
+            transform: scale(1.5);
+        }
 
-            /* --- СЕРДЕЧКИ: ЧАЩЕ И ЗАМЕТНЕЕ --- */
-            .heart {
-                position: absolute;
-                color: var(--accent);
-                opacity: 0;
-                pointer-events: none;
-                z-index: 100; 
-                animation: floatUp 5s ease-in forwards;
-                /* Добавили мягкое свечение для заметности */
-                filter: drop-shadow(0 0 5px rgba(255, 143, 171, 0.5));
-            }
+        /* --- СЕРДЕЧКИ: МИНИМАЛИСТИЧНЫЕ И НЕЗАМЕТНЫЕ --- */
+        .heart {
+            position: absolute;
+            color: var(--accent);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5; /* Теперь они ЗА карточкой, чтобы не мешать тексту */
+            animation: floatUp 6s ease-in forwards;
+            filter: blur(2px); /* Больше размытия для мягкости */
+        }
 
-            @keyframes floatUp {
-                0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
-                15% { opacity: 0.3; } /* Увеличили прозрачность для заметности */
-                85% { opacity: 0.3; }
-                100% { transform: translateY(-110vh) scale(1.5) rotate(20deg); opacity: 0; }
-            }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.1; } /* Едва заметная прозрачность */
+            85% { opacity: 0.1; }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(15deg); opacity: 0; }
+        }
 
-            .card-wrapper {
-                position: relative;
-                z-index: 10;
-                perspective: 1000px;
-                width: 100%;
-                max-width: 360px;
-                display: flex;
-                justify-content: center;
-            }
+        .card-wrapper {
+            position: relative;
+            z-index: 10;
+            perspective: 1000px;
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            justify-content: center;
+        }
 
-            .card {
-                width: 100%;
-                height: 440px;
-                background: var(--card-glass);
-                backdrop-filter: blur(15px);
-                -webkit-backdrop-filter: blur(15px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 32px;
-                padding: 30px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: var(--transition);
-                box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            }
+        .card {
+            width: 100%;
+            height: 440px;
+            background: var(--card-glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
 
-            .card:active { transform: scale(0.96); }
+        .card:active { transform: scale(0.96); }
 
-            body.active .card {
-                background: #ffffff;
-                border-color: transparent;
-                box-shadow: 0 40px 100px rgba(255, 143, 171, 0.25);
-                height: auto;
-                min-height: 480px;
-                max-height: 85vh;
-                padding: 45px 30px;
-            }
+        body.active .card {
+            background: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 40px 100px rgba(255, 143, 171, 0.25);
+            height: auto;
+            min-height: 480px;
+            max-height: 85vh;
+            padding: 45px 30px;
+        }
 
-            .header-text { text-align: center; transition: var(--transition); }
+        .header-text { text-align: center; transition: var(--transition); }
 
-            .header-text span {
-                font-size: 10px;
-                letter-spacing: 5px;
-                text-transform: uppercase;
-                color: var(--accent);
-                display: block;
-                margin-bottom: 15px;
-            }
+        .header-text span {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 15px;
+        }
 
-            h1 {
-                font-family: 'Cormorant Garamond', serif;
-                font-size: 2.2rem;
-                font-style: italic;
-                font-weight: 300;
-                color: #fff;
-                line-height: 1.1;
-            }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1.1;
+        }
 
-            body.active h1 { color: #1a1a1a; font-weight: 600; font-size: 2.1rem; }
+        body.active h1 { color: #1a1a1a; font-weight: 600; font-size: 2.1rem; }
 
-            .reveal-content {
-                max-height: 0;
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 1.2s ease 0.3s;
-                text-align: center;
-                overflow: hidden;
-            }
+        .reveal-content {
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1.2s ease 0.3s;
+            text-align: center;
+            overflow: hidden;
+        }
 
-            body.active .reveal-content {
-                max-height: 500px;
-                opacity: 1;
-                transform: translateY(0);
-                margin-top: 35px;
-            }
+        body.active .reveal-content {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 35px;
+        }
 
-            .wish-text {
-                font-size: 1rem;
-                line-height: 1.7;
-                color: #555;
-                font-weight: 300;
-            }
+        .wish-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #555;
+            font-weight: 300;
+        }
 
-            .signature {
-                font-family: 'Cormorant Garamond', serif;
-                font-size: 1.9rem;
-                color: var(--accent);
-                margin-top: 25px;
-                font-style: italic;
-            }
+        .signature {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            color: var(--accent);
+            margin-top: 25px;
+            font-style: italic;
+        }
 
-            .hint {
-                position: absolute;
-                bottom: -50px;
-                width: 100%;
-                text-align: center;
-                font-size: 9px;
-                letter-spacing: 4px;
-                color: #777;
-                text-transform: uppercase;
-                animation: breathe 2s infinite ease-in-out;
-            }
+        .hint {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            font-size: 9px;
+            letter-spacing: 4px;
+            color: #777;
+            text-transform: uppercase;
+            animation: breathe 2s infinite ease-in-out;
+        }
 
-            @keyframes breathe {
-                0%, 100% { opacity: 0.4; }
-                50% { opacity: 0.8; }
-            }
+        @keyframes breathe {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
 
-            body.active .hint { display: none; }
+        body.active .hint { display: none; }
 
-            footer {
-                position: absolute;
-                bottom: 25px;
-                font-size: 8px;
-                letter-spacing: 5px;
-                color: #666;
-                text-transform: uppercase;
-            }
+        footer {
+            position: absolute;
+            bottom: 25px;
+            font-size: 8px;
+            letter-spacing: 5px;
+            color: #666;
+            text-transform: uppercase;
+        }
 
-            @media (max-width: 480px) {
-                .card { height: 420px; }
-                body.active .card { min-height: 450px; padding: 40px 20px; }
-                h1 { font-size: 1.9rem; }
-                body.active h1 { font-size: 1.7rem; }
-            }
-        </style>
-    </head>
-    <body id="body">
+        @media (max-width: 480px) {
+            .card { height: 420px; }
+            body.active .card { min-height: 450px; padding: 40px 20px; }
+            h1 { font-size: 1.9rem; }
+            body.active h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body id="body">
 
-        <div class="spotlight"></div>
+    <div class="spotlight"></div>
 
-        <div class="card-wrapper" onclick="openCard()">
-            <div class="card">
-                <div class="header-text">
-                    <span>International</span>
-                    <h1>Поздравление <br> для Тебя</h1>
-                </div>
-
-                <div class="reveal-content">
-                    <p class="wish-text">
-                        Пусть твоя жизнь будет <br>
-                        наполнена легкостью, светом <br>
-                        и бесконечным вдохновением. <br>
-                        Цвети, сияй и оставайся <br>
-                        самым прекрасным <br>
-                        созданием в этом мире.
-                    </p>
-                    <div class="signature">С 8 Марта!</div>
-                </div>
-
-                <div class="hint">Коснись, чтобы открыть</div>
+    <div class="card-wrapper" onclick="openCard()">
+        <div class="card">
+            <div class="header-text">
+                <span>International</span>
+                <h1>Поздравление <br> для Тебя</h1>
             </div>
+
+            <div class="reveal-content">
+                <p class="wish-text">
+                    Пусть твоя жизнь будет <br>
+                    наполнена легкостью, светом <br>
+                    и бесконечным вдохновением. <br>
+                    Цвети, сияй и оставайся <br>
+                    самым прекрасным <br>
+                    созданием в этом мире.
+                </p>
+                <div class="signature">С 8 Марта!</div>
+            </div>
+
+            <div class="hint">Коснись, чтобы открыть</div>
         </div>
+    </div>
 
-        <footer>Limited Edition &bull; 2026</footer>
+    <footer>Limited Edition &bull; 2026</footer>
 
-        <script>
-            function createHeart() {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '❤';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '100vh';
-                // Разнообразие размеров
-                const size = Math.random() * 12 + 10;
-                heart.style.fontSize = size + 'px';
-                // Разная скорость полета
-                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            const size = Math.random() * 8 + 8;
+            heart.style.fontSize = size + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 5) + 's';
+            
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 7000);
+        }
+
+        function openCard() {
+            const body = document.getElementById('body');
+            if (!body.classList.contains('active')) {
+                body.classList.add('active');
                 
-                document.body.appendChild(heart);
-                setTimeout(() => { heart.remove(); }, 5000);
+                // РЕДКО: интервал 400мс
+                setInterval(createHeart, 400);
+
+                const duration = 2 * 1000;
+                const animationEnd = Date.now() + duration;
+                const colors = ['#ff8fab', '#ffffff', '#ffd1dc'];
+
+                (function frame() {
+                    const timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return;
+                    confetti({
+                        particleCount: 2,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 },
+                        colors: colors,
+                        startVelocity: 15,
+                        spread: 360,
+                        ticks: 60,
+                        zIndex: 200
+                    });
+                    requestAnimationFrame(frame);
+                }());
             }
-
-            function openCard() {
-                const body = document.getElementById('body');
-                if (!body.classList.contains('active')) {
-                    body.classList.add('active');
-                    
-                    // ЧАЩЕ: интервал 150мс вместо 350мс
-                    setInterval(createHeart, 150);
-
-                    const duration = 2 * 1000;
-                    const animationEnd = Date.now() + duration;
-                    const colors = ['#ff8fab', '#ffffff', '#ffd1dc'];
-
-                    (function frame() {
-                        const timeLeft = animationEnd - Date.now();
-                        if (timeLeft <= 0) return;
-                        confetti({
-                            particleCount: 2,
-                            origin: { x: Math.random(), y: Math.random() - 0.2 },
-                            colors: colors,
-                            startVelocity: 15,
-                            spread: 360,
-                            ticks: 60,
-                            zIndex: 200
-                        });
-                        requestAnimationFrame(frame);
-                    }());
-                }
-            }
-        </script>
-    </body>
-    </html>
+        }
+    </script>
+</body>
+</html>
